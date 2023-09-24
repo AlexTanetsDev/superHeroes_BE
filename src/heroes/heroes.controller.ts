@@ -36,6 +36,12 @@ export class HeroesController {
     return this.heroesServise.getAll();
   }
 
+  // @Get('images/:key')
+  // getImage(@Param('key') key: string) {
+  //   const readStream = downloadImage(key);
+  //   console.log(readStream);
+  // }
+
   @ApiOperation({ summary: 'Get one superhero by id' })
   @ApiResponse({ status: 200, type: Hero })
   @Get(':id')
@@ -47,14 +53,20 @@ export class HeroesController {
   @ApiResponse({ status: 201, type: Hero })
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(FileInterceptor('image'))
   async createHero(
     @UploadedFile() file: Express.Multer.File,
     @Body() createHeroDto: CreateHeroDto,
   ) {
-    const result = await uploadPhoto('firsFile', file.buffer);
+    const hero = await this.heroesServise.createHero(createHeroDto);
 
-    console.log(result);
+    await uploadPhoto(file.originalname, file);
+    this.photosServise.addPhoto({
+      photo_title: file.originalname,
+      hero_id: hero.dataValues.hero_id,
+    });
+
+    return 'Hero created sucsessfuly';
   }
 
   @ApiOperation({ summary: 'Delete superhero' })

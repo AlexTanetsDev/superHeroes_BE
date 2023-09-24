@@ -27,5 +27,9 @@ export class CreateHeroDto {
     example: ['1.png', '2.gpeg'],
     description: 'Array of superhero photos',
   })
-  readonly images: string[];
+  @ApiProperty({
+    example: 'File.jpg',
+    description: 'Hero photo',
+  })
+  readonly image: Express.Multer.File;
 }

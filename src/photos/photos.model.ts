@@ -1,11 +1,10 @@
 import { Column, DataType, Model, Table } from 'sequelize-typescript';
 
 interface IHeroPhoto {
-  photo_url: string;
   photo_title: string;
 }
 
-@Table({ tableName: 'heroPhotos' })
+@Table({ tableName: 'herophotos' })
 export class Photo extends Model<Photo, IHeroPhoto> {
   @Column({
     type: DataType.INTEGER,
@@ -18,14 +17,8 @@ export class Photo extends Model<Photo, IHeroPhoto> {
   @Column({
     type: DataType.TEXT,
     unique: true,
-    allowNull: false,
-  })
-  photo_url: string;
-
-  @Column({
-    type: DataType.TEXT,
-    unique: true,
     defaultValue: 'Hero photo',
+    primaryKey: true,
   })
   photo_title: string;
 

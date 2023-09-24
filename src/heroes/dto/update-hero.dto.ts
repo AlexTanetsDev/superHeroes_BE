@@ -22,5 +22,10 @@ export class UpdateHeroDto {
     description: 'Cath phrase',
   })
   readonly cach_phrase: string;
-  readonly images: string[];
+
+  @ApiProperty({
+    example: 'File.jpg',
+    description: 'Hero photo',
+  })
+  readonly image: Express.Multer.File;
 }

@@ -9,7 +9,18 @@ images  TEXT[],
 PRIMARY KEY(hero_id, nickname)
 );
 
-DROP TABLE superheroes;
+CREATE TABLE herophotos(
+ photo_id SERIAL,
+photo_title TEXT NOT NULL UNIQUE DEFAULT 'Hero photo',
+hero_id INTEGER ,    
+createdAt TIMESTAMP WITH TIME ZONE NOT NULL,
+updatedAt TIMESTAMP WITH TIME ZONE NOT NULL,
+PRIMARY KEY(hero_id, photo_title),
+FOREIGN KEY(hero_id) REFERENCES heroes(hero_id) ON DELETE CASCADE
+);
+
+
+DROP TABLE herophotos;
 
 INSERT INTO superheroes (nickname, real_name, origin_description, superpowers, catch_phrase, images) VALUES('value','value','value','value','value', ARRAY['value', 'value','value']);
 

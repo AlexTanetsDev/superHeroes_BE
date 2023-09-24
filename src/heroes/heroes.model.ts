@@ -8,7 +8,7 @@ interface ICreateHero {
   origin_description: string;
   superpowers: string;
   catch_phrase: string;
-  images: string[];
+  images: Express.Multer.File;
 }
 
 @Table({ tableName: 'heroes' })
