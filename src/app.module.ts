@@ -5,6 +5,7 @@ import 'dotenv/config';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { HeroesModule } from './heroes/heroes.module';
 import { Hero } from './heroes/heroes.model';
+import { Photo } from './photos/photos.model';
 
 const {
   POSTGRES_HOST,
@@ -27,7 +28,7 @@ const {
       username: POSTGRES_USER,
       password: POSTRGRES_PASSWORD,
       database: POSTGRES_DB,
-      models: [Hero],
+      models: [Hero, Photo],
       autoLoadModels: true,
       dialectOptions: {
         ssl: {

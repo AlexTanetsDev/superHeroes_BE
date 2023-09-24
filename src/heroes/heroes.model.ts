@@ -1,4 +1,6 @@
-import { Column, DataType, Model, Table } from 'sequelize-typescript';
+import { ApiProperty } from '@nestjs/swagger';
+import { Column, DataType, HasMany, Model, Table } from 'sequelize-typescript';
+import { Photo } from '../photos/photos.model';
 
 interface ICreateHero {
   nickname: string;
@@ -6,10 +8,12 @@ interface ICreateHero {
   origin_description: string;
   superpowers: string;
   catch_phrase: string;
+  images: string[];
 }
 
 @Table({ tableName: 'heroes' })
 export class Hero extends Model<Hero, ICreateHero> {
+  @ApiProperty({ example: 1, description: 'Unique superhero ID' })
   @Column({
     type: DataType.INTEGER,
     unique: true,
@@ -18,6 +22,7 @@ export class Hero extends Model<Hero, ICreateHero> {
   })
   hero_id: number;
 
+  @ApiProperty({ example: 'Superman', description: 'Superhero nickname' })
   @Column({
     type: DataType.TEXT,
     unique: true,
@@ -26,15 +31,36 @@ export class Hero extends Model<Hero, ICreateHero> {
   })
   nickname: string;
 
+  @ApiProperty({ example: 'Clark Kent', description: 'Superhero real name' })
   @Column({ type: DataType.TEXT, unique: true, allowNull: false })
   real_name: string;
 
+  @ApiProperty({
+    example:
+      "he was born Kal-El on the planet Krypton, before being rocketed to Earth as an infant by his scientist father Jor-El, moments before Krypton's destruction...",
+    description: 'Superhero description',
+  })
   @Column({ type: DataType.TEXT, allowNull: false })
   origin_description: string;
 
+  @ApiProperty({
+    example:
+      'solar energy absorption and healing factor, solar flare and heat vision, solar invulnerability, flight...',
+    description: 'Superpower',
+  })
   @Column({ type: DataType.TEXT, allowNull: false })
   superpowers: string;
 
+  @ApiProperty({
+    example: "Look, up in the sky, it's a bird, it's a plane, it's Superman!",
+    description: 'Cath phrase',
+  })
   @Column({ type: DataType.TEXT })
   catch_phrase: string;
+
+  @HasMany(() => Photo, {
+    foreignKey: 'hero_id',
+    onDelete: 'CASCADE',
+  })
+  photos: Photo[];
 }
