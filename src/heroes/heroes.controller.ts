@@ -19,7 +19,7 @@ import { UpdateHeroDto } from './dto/update-hero.dto';
 import { HeroesServise } from './heroes.service';
 import { Hero } from './heroes.model';
 import { PhotosService } from 'src/photos/photos.service';
-import { uploadPhoto } from 'src/helpers/aws.s3';
+import { PhotoS3Loader } from 'src/helpers/aws.s3';
 
 @ApiTags('Heroes')
 @Controller('heroes')
@@ -27,6 +27,7 @@ export class HeroesController {
   constructor(
     private readonly heroesServise: HeroesServise,
     private readonly photosServise: PhotosService,
+    private readonly photoLoader: PhotoS3Loader,
   ) {}
 
   @ApiOperation({ summary: 'Get all superheroes' })
@@ -35,12 +36,6 @@ export class HeroesController {
   getAll() {
     return this.heroesServise.getAll();
   }
-
-  // @Get('images/:key')
-  // getImage(@Param('key') key: string) {
-  //   const readStream = downloadImage(key);
-  //   console.log(readStream);
-  // }
 
   @ApiOperation({ summary: 'Get one superhero by id' })
   @ApiResponse({ status: 200, type: Hero })
@@ -60,10 +55,10 @@ export class HeroesController {
   ) {
     const hero = await this.heroesServise.createHero(createHeroDto);
 
-    await uploadPhoto(file.originalname, file);
-    this.photosServise.addPhoto({
+    await this.photoLoader.uploadPhoto(file.originalname, file);
+    await this.photosServise.addPhoto({
       photo_title: file.originalname,
-      hero_id: hero.dataValues.hero_id,
+      owner_id: hero.dataValues.hero_id,
     });
 
     return 'Hero created sucsessfuly';
@@ -72,14 +67,14 @@ export class HeroesController {
   @ApiOperation({ summary: 'Delete superhero' })
   @ApiResponse({ status: 200, type: String })
   @Delete(':id')
-  removeHero(@Param('id') id: string) {
-    return this.heroesServise.removeHero(id);
+  async removeHero(@Param('id') id: string) {
+    return await this.heroesServise.removeHero(id);
   }
 
   @ApiOperation({ summary: 'Update superhero' })
   @ApiResponse({ status: 200, type: String })
   @Put(':id')
-  update(@Body() updateHeroDto: UpdateHeroDto, @Param('id') id: string) {
-    return this.heroesServise.updateHero(updateHeroDto, id);
+  async update(@Body() updateHeroDto: UpdateHeroDto, @Param('id') id: string) {
+    return await this.heroesServise.updateHero(updateHeroDto, id);
   }
 }

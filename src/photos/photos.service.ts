@@ -5,9 +5,9 @@ import { AddPhotoDto } from './dto/addPhoto.dto';
 export class PhotosService {
   constructor(@InjectModel(Photo) private photosRepository: typeof Photo) {}
 
-  async getHeroPhotos(id: number) {
+  async getHeroPhotos(id: string) {
     const photos = await this.photosRepository.findAll({
-      where: { hero_id: id },
+      where: { owner_id: id },
     });
     return photos;
   }

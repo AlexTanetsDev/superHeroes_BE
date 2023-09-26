@@ -1,4 +1,12 @@
-import { Column, DataType, Model, Table } from 'sequelize-typescript';
+import {
+  BelongsTo,
+  Column,
+  DataType,
+  ForeignKey,
+  Model,
+  Table,
+} from 'sequelize-typescript';
+import { Hero } from 'src/heroes/heroes.model';
 
 interface IHeroPhoto {
   photo_title: string;
@@ -22,9 +30,13 @@ export class Photo extends Model<Photo, IHeroPhoto> {
   })
   photo_title: string;
 
+  @ForeignKey(() => Hero)
   @Column({
     type: DataType.INTEGER,
     primaryKey: true,
   })
-  hero_id: number;
+  owner_id: number;
+
+  @BelongsTo(() => Hero, { onDelete: 'CASCADE' })
+  hero: Hero;
 }

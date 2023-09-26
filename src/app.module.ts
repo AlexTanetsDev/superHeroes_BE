@@ -6,6 +6,7 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { HeroesModule } from './heroes/heroes.module';
 import { Hero } from './heroes/heroes.model';
 import { Photo } from './photos/photos.model';
+import { PhotosModule } from './photos/photos.module';
 
 const {
   POSTGRES_HOST,
@@ -18,6 +19,7 @@ const {
 @Module({
   imports: [
     HeroesModule,
+    PhotosModule,
     ConfigModule.forRoot({
       envFilePath: '.env',
     }),

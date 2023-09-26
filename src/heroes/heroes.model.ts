@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Column, DataType, HasMany, Model, Table } from 'sequelize-typescript';
-import { Photo } from '../photos/photos.model';
+import { Column, DataType, HasOne, Model, Table } from 'sequelize-typescript';
+import { Photo } from 'src/photos/photos.model';
 
 interface ICreateHero {
   nickname: string;
@@ -8,7 +8,7 @@ interface ICreateHero {
   origin_description: string;
   superpowers: string;
   catch_phrase: string;
-  images: Express.Multer.File;
+  image: Express.Multer.File;
 }
 
 @Table({ tableName: 'heroes' })
@@ -58,9 +58,6 @@ export class Hero extends Model<Hero, ICreateHero> {
   @Column({ type: DataType.TEXT })
   catch_phrase: string;
 
-  @HasMany(() => Photo, {
-    foreignKey: 'hero_id',
-    onDelete: 'CASCADE',
-  })
-  photos: Photo[];
+  @HasOne(() => Photo, { foreignKey: 'owner_id', onDelete: 'CASCADE' })
+  photo: Photo;
 }

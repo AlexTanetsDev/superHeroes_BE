@@ -29,8 +29,9 @@ export class HeroesServise {
         hero_id: id,
       },
     });
-    if (hero[0]) return 'Hero deleted succesfully';
-    return 'something went wrong, please try again';
+    if (hero) return 'Hero deleted succesfully';
+
+    return 'Something went wrong, try again';
   }
 
   async updateHero(dto: UpdateHeroDto, id: string) {
